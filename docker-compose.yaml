@@ -1,0 +1,10 @@
+version: '3'
+services:
+    vim:
+        image: "vim:latest"
+        command: 'bash -c "tail -f"'
+        volumes:
+           - "$GOPATH:/gopath"
+             #- "$GOROOT:/goroot"
+           - "$GOPROJECT:/workspace"
+
