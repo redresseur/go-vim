@@ -1,6 +1,8 @@
 ARG CODE_VERSION=latest
 FROM ubuntu:latest
 
+USER root
+
 ENV GOPATH=/gopath
 ENV GOROOT=/go
 ENV PATH=$PATH:/gopath/bin:/usr/local/bin:/go/bin
@@ -21,9 +23,13 @@ COPY ./.vim $HOME/.vim
 RUN chown 1040:1030 $HOME/.vimrc --recursive
 RUN chown 1040:1030 $HOME/.vim --recursive
 
-RUN apt-get install ctags
+RUN apt-get install ctags -y  && apt-get install curl -y
 
-USER 1040:1030
-# +q +q cannot be change
+RUN  curl -sSL -o /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.11/gosu-$(dpkg --print-architecture)" \
+  && chmod +x /usr/local/bin/gosu 
+
 RUN vim +PluginInstall +q +q
 
+COPY ./entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/usr/bin/tail -f"]
