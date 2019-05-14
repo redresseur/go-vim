@@ -5,7 +5,7 @@ Wants=docker.service
 
 [Service]
 EnvironmentFile=/etc/go_vim_config/go_vim.conf
-ExecStart=/usr/local/bin/go_vim.sh $GOPATH $LOCALDIR
+ExecStart=/usr/local/bin/go_vim_service.sh $GOPATH $LOCALDIR
 ExecStop=/usr/bin/docker rm -f go_vim
 ExecReload=/bin/kill -HUP $MAINPID
 Type=idle
