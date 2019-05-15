@@ -8,14 +8,16 @@ ENV UID=${uid}
 ENV HOME=/home/gopher
 
 #RUN useradd --no-log-init -r -m -g $gid -u $uid gopher
-RUN groupadd -r -g $GID go_vim && useradd --no-log-init -r -m -g $GID -u $UID gopher
+RUN groupadd -r -g $GID go_vim && useradd --no-log-init -r -m -g 0 -g $GID -u $UID gopher
 
 RUN chown $UID:$GID /bin/bash 
 
-RUN chown $UID:$GID $HOME
-RUN chown $UID:$GID $HOME/.vim --recursive
-RUN chown $UID:$GID $HOME/.vimrc 
+RUN chown -R $UID:$GID $HOME
+#RUN chown $UID:$GID $HOME/.vim --recursive
+#RUN chown $UID:$GID $HOME/.vimrc 
 RUN vim -c PluginInstall -c q -c q
+
+#RUN useradd -gid 0 -uid $UID
 
 COPY ./entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

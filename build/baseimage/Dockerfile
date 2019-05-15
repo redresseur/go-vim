@@ -9,7 +9,7 @@ RUN apt-get install python -y
 RUN  curl -sSL -o /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.11/gosu-$(dpkg --print-architecture)" \
   && chmod +x /usr/local/bin/gosu 
 
-ADD ./plugin.tar.gz /usr/local/bin/
+ADD ./plugin.tar.gz /usr/local/
 ADD ./go1.12.5.linux-amd64.tar.gz /
 
 ENV GOPATH=/gopath

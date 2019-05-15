@@ -12,8 +12,10 @@ name="go_vim"
 
 gopath=$1
 localdir=$2
+uid=$3
+gid=$4
 
-docker run -v $volume_root -v $volume_usr -v $volume_etc -v $volume_var\
+docker run  -v $volume_root -v $volume_usr -v $volume_etc -v $volume_var\
        	-v $gopath:/gopath -v $localdir:$workdir/workspace --network $network --name $name \
-	--rm --workdir $workdir/workspace $image 
+	--rm --workdir $workdir/workspace --privileged  $image 
 

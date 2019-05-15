@@ -1,5 +1,5 @@
 #!/bin/sh
-image="luckydogchian/go_vim:latest"
+image="luckydogchian/go_vim_baseimage:v0.6"
 docker pull $image
 mkdir -p /etc/go_vim_config/
 cp go_vim.conf /etc/go_vim_config
