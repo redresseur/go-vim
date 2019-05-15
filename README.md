@@ -9,6 +9,8 @@
   ```
     git clone https://github.com/redresseur/go-vim.git
   ```
+  或
+  下载release 版本解压缩到本地（建议采用这种方式）
 2. 进入工程目录,配置工程目录：
   ```
     cd $go-vim
@@ -18,10 +20,25 @@
   ```
     GOPATH=xxx
     LOCALDIR=xxx
+    USERID=xxx
+    GROUPID=xxx
   ```
+  其中GOPATH是本地的GOPATH目录，LOCALDIR就是常用的工程目录，USERID 是本地常用用户的 id，GROUPID 是本地常用用户的 组id，可以在 shell中执行 `id` 命令获取：
+  ```
+  uid=1000(gopher) gid=1000(gopher) 组=1000(gopher),999(docker)
+
+  ```
+  建议填入在LOCALDIR和GOPATH中有 `rw` 权限的本地用户的 uid 和 groupid.
   ps: 在镜像中集成了 golang 1.12.5 开发环境, 在该版本中支持go module 管理模式, 建议使用该管理工具,所以拆分为 $GOPATH 和 $LOCALDIR 两个部分.
 
-3. 执行安装脚本：
+3. 构造本地镜像：
+```
+  cd $go-vim/build
+  docker build  --build-arg  uid=xxx --build-arg gid=xxx -t luckydogchian/go_vim:latest ./
+```
+其中的 uid 与 gid 与上面填入 go_vim.conf 中保持一致.
+
+4. 执行安装脚本：
   ```
     sudo bash install.sh
   ```
@@ -44,15 +61,19 @@
  ## IDE使用
  1. 进入容器
   ```
-    docker exec -u 1040:11030 -it go_vim bash
+    go_vim.sh open ./
   ```
  2. 打开项目
  
    ```
       vim xxx/$project
    ```
-   按F9 可以列出 当前文件的接口和函数, 按 F7可以列出工程结构，调试请参考详细内容.</br>
+   按F4 可以列出 当前文件的接口和函数, 按 F7可以列出工程结构，其他功能集成了 fatih/vim-go, 调试等操作请参考[详细内容](https://github.com/fatih/vim-go/blob/master/doc/vim-go.txt).</br>
  
+ ## 其他
+ 
+ + 镜像中集成了 git 工具，其他缺失的工具可以在镜像中执行 `apt-get install` 进行安装，也可以将它集成在 DockerFile中（建议使用这种做法）;
+ + 在自己更新了镜像之后要先执行 `systemctl stop go_vim`来停止服务，然后使用 `docker volume prune -f` 来清除历史卷，最后再执行 `systemctl start go_vim` ，如果没有更新镜像，不需要做此操作，仅仅执行`systemctl restart go_vim` 即可.
  
  ## 注意事项
  
